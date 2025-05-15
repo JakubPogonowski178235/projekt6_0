@@ -2,11 +2,10 @@ import java.io.IOException;
 import java.util.Scanner;
 
 class WrongStudentName extends Exception { }
-
-// Definicja nowego wyjątku sprawdzającego wiek studenta.
 class WrongAge extends Exception { }
+class WrongDateOfBirth extends Exception { }
 
-class Main {
+public class Main {
     public static Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -14,24 +13,19 @@ class Main {
             try {
                 int ex = menu();
                 switch(ex) {
-                    case 1:
-                        exercise1();
-                        break;
-                    case 2:
-                        exercise2();
-                        break;
-                    case 3:
-                        exercise3();
-                        break;
-                    default:
-                        return;
+                    case 1: exercise1(); break;
+                    case 2: exercise2(); break;
+                    case 3: exercise3(); break;
+                    default: return;
                 }
             } catch(IOException e) {
                 System.out.println("Błąd wejścia/wyjścia: " + e.getMessage());
             } catch(WrongStudentName e) {
-                System.out.println("Błędne imię studenta!");
+                System.out.println("Błędne imię studenta! Nie może zawierać spacji.");
             } catch(WrongAge e) {
-                System.out.println("Błędny wiek! Poprawny wiek to liczba z przedziału 1-99.");
+                System.out.println("Błędny wiek studenta! Musi być z przedziału 1-99.");
+            } catch(WrongDateOfBirth e) {
+                System.out.println("Błędny format daty! Wymagany format: DD-MM-YYYY");
             }
         }
     }
@@ -46,7 +40,7 @@ class Main {
     }
 
     public static String ReadName() throws WrongStudentName {
-        scan.nextLine(); // czyszczenie bufora
+        scan.nextLine();
         System.out.println("Podaj imię: ");
         String name = scan.nextLine();
         if(name.contains(" "))
@@ -54,17 +48,32 @@ class Main {
         return name;
     }
 
-    // W metodzie exercise1 dodajemy walidację wieku.
-    public static void exercise1() throws IOException, WrongStudentName, WrongAge {
-        String name = ReadName();
+    public static int ReadAge() throws WrongAge {
         System.out.println("Podaj wiek: ");
         int age = scan.nextInt();
-        // Sprawdzenie poprawności wieku: 1-99
         if(age < 1 || age > 99)
             throw new WrongAge();
-        scan.nextLine(); // czyszczenie bufora
-        System.out.println("Podaj datę urodzenia: ");
+        return age;
+    }
+
+    public static String ReadDate() throws WrongDateOfBirth {
+        System.out.println("Podaj datę urodzenia DD-MM-YYYY");
         String date = scan.nextLine();
+        String[] parts = date.split("-");
+        if(parts.length != 3 ||
+           parts[0].length() != 2 ||
+           parts[1].length() != 2 ||
+           parts[2].length() != 4) {
+            throw new WrongDateOfBirth();
+        }
+        return date;
+    }
+
+    public static void exercise1() throws IOException, WrongStudentName, WrongAge, WrongDateOfBirth {
+        var name = ReadName();
+        var age = ReadAge();
+        scan.nextLine();
+        var date = ReadDate();
         (new Service()).addStudent(new Student(name, age, date));
     }
 
@@ -76,10 +85,10 @@ class Main {
     }
 
     public static void exercise3() throws IOException {
-        scan.nextLine(); // czyszczenie bufora
+        scan.nextLine();
         System.out.println("Podaj imię: ");
-        String name = scan.nextLine();
-        Student wanted = (new Service()).findStudentByName(name);
+        var name = scan.nextLine();
+        var wanted = (new Service()).findStudentByName(name);
         if(wanted == null)
             System.out.println("Nie znaleziono...");
         else {

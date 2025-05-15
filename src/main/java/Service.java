@@ -21,7 +21,10 @@ public class Service {
         var f = new FileReader("db.txt");
         var reader = new BufferedReader(f);
         String line = "";
-        while ((line = reader.readLine()) != null) {
+        while (true) {
+            line = reader.readLine();
+            if(line == null)
+                break;
             ret.add(Student.Parse(line));
         }
         reader.close();

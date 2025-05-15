@@ -10,20 +10,12 @@ public class Student {
         Date = date;
     }
 
-    public String GetName() {
-        return Name;
-    }
-
-    public int GetAge() {
-        return Age;
-    }
-
-    public String GetDate() {
-        return Date;
-    }
+    public String GetName() { return Name; }
+    public int GetAge() { return Age; }
+    public String GetDate() { return Date; }
 
     public String ToString() {
-        return Name + " " + Age + " " + Date;
+        return Name + " " + Integer.toString(Age) + " " + Date;
     }
 
     public static Student Parse(String str) {
