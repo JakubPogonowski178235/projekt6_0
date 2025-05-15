@@ -15,7 +15,7 @@ Poniższe zadania będą się sprowadzały do modyfikacji bazowego kodu. Proces 
 import java.io.IOException;
 import java.util.Scanner;
 
-class WrongStudentName extends Exception { }
+class WrongStudentName extends Exception { } 
 
 class Main {
     public static Scanner scan = new Scanner(System.in);
